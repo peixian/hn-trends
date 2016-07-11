@@ -24,7 +24,7 @@ class Scrape(object):
         params = {'day': date.strftime('%Y-%m-%d')}
         req = requests.get(self.url_base, params)
         content = html2text.html2text(str(req.content))
-        comment_links = re.findall('item\?id=[0-9]*', content)
+        comment_links = list(set(re.findall('item\?id=[0-9]*', content)))
         comments = list(map(lambda x: self.return_comments_page(x), comment_links))
         return comments
         
@@ -35,3 +35,5 @@ class Scrape(object):
         comments = list(map(lambda x: self.return_comments(x), date_range))
 
         return comments
+
+
