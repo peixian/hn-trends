@@ -1,3 +1,4 @@
+
 #HN uses the https://news.ycombinator.com/front?day={yyyy}-{mm}-{dd} format for top posts of that day
 
 import requests
@@ -5,7 +6,7 @@ from bs4 import BeautifulSoup as bs
 from datetime import date, datetime, timedelta
 import pandas as pd
 import re
-import html2text 
+import html2text
 
 class Scrape(object):
 
@@ -18,7 +19,7 @@ class Scrape(object):
         soup = bs(req.content, 'html.parser')
         comments = list(map(lambda x: x.text.strip(), soup.find_all(class_='comment')))
         return comments
-        
+
     def return_comments_date(self, date):
         #returns the comments for a particular day as a list
         params = {'day': date.strftime('%Y-%m-%d')}
@@ -27,7 +28,6 @@ class Scrape(object):
         comment_links = list(set(re.findall('item\?id=[0-9]*', content)))
         comments = list(map(lambda x: self.return_comments_page(x), comment_links))
         return comments
-        
 
     def return_comments_range(self, start_date, end_date):
         #returns all the comments for a range of dates
