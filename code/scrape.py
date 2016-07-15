@@ -7,6 +7,7 @@ from datetime import date, datetime, timedelta
 import pandas as pd
 import re
 import html2text
+import numpy as np
 
 class Scrape(object):
 
@@ -18,6 +19,7 @@ class Scrape(object):
         req = requests.get(self.url+item_url)
         soup = bs(req.content, 'html.parser')
         comments = list(map(lambda x: x.text.strip(), soup.find_all(class_='comment')))
+        comments = np.array(comments)
         return comments
 
     def return_comments_date(self, date):
@@ -27,13 +29,14 @@ class Scrape(object):
         content = html2text.html2text(str(req.content))
         comment_links = list(set(re.findall('item\?id=[0-9]*', content)))
         comments = list(map(lambda x: self.return_comments_page(x), comment_links))
+        comments = np.array(comments)
         return comments
 
     def return_comments_range(self, start_date, end_date):
         #returns all the comments for a range of dates
         date_range = pd.date_range(start_date, end_date)
         comments = list(map(lambda x: self.return_comments(x), date_range))
-
+        comments = np.array(comments)
         return comments
 
 
